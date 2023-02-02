@@ -15,8 +15,9 @@ void main() {
     theme: ThemeData(primarySwatch: Colors.blue),
     home: const HomePage(),
     routes: {
-      '/login': (context) => const LoginView(),
-      '/register': (context) => const RegisterView(),
+      '/login/': (context) => const LoginView(),
+      '/register/': (context) => const RegisterView(),
+      '/notes/': (context) => const NotesView(),
     },
   ));
 }
@@ -34,6 +35,7 @@ class HomePage extends StatelessWidget {
         switch (snapshot.connectionState) {
           case ConnectionState.done:
             final user = FirebaseAuth.instance.currentUser;
+            devtools.log(user.toString());
             if (user != null) {
               if (user.emailVerified) {
                 return const NotesView();
@@ -73,10 +75,12 @@ class _NotesViewState extends State<NotesView> {
                 switch (value) {
                   case MenuAction.logout:
                     final shouldLogout = await showLogOutDialog(context);
-                    if (!shouldLogout) {
+                    if (shouldLogout) {
                       await FirebaseAuth.instance.signOut();
-                      Navigator.of(context)
-                          .pushNamedAndRemoveUntil("/login", (_) => false);
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        "/login/",
+                        (_) => false,
+                      );
                     }
                     devtools.log(shouldLogout.toString());
                     break;
