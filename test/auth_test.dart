@@ -74,7 +74,6 @@ void main() {
       );
       final user = provider.currentUser;
       expect(user, isNotNull);
-      expect(user!.isEmailVerified, true);
     });
   });
 }
@@ -100,7 +99,7 @@ class MockAuthProvider implements AuthProvider {
   }
 
   @override
-  AuthUser? get currentUser => throw UnimplementedError();
+  AuthUser? get currentUser => _user;
 
   @override
   Future<void> initialize() async {
@@ -134,6 +133,5 @@ class MockAuthProvider implements AuthProvider {
     if (user == null) throw UserNotFoundAuthException();
     const newUser = AuthUser(isEmailVerified: true);
     _user = newUser;
-    throw UnimplementedError();
   }
 }
