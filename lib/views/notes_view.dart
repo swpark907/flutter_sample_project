@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sample_project/constants/constants.dart';
 import 'package:sample_project/services/auth/auth_service.dart';
 import 'package:sample_project/services/crud/notes_service.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../enums/menu_action.dart';
 
@@ -21,12 +22,6 @@ class _NotesViewState extends State<NotesView> {
     _notesService = NotesService();
     _notesService.open();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _notesService.close();
-    super.dispose();
   }
 
   @override
@@ -77,7 +72,26 @@ class _NotesViewState extends State<NotesView> {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
                       case ConnectionState.active:
-                        return const Text("Waiting for all notes...");
+                        if (snapshot.hasData) {
+                          final allNotes = snapshot.data as List<DatabaseNote>;
+                          return ListView.builder(
+                            itemCount: allNotes.length,
+                            itemBuilder: (context, index) {
+                              final note = allNotes[index];
+                              return ListTile(
+                                title: Text(
+                                  note.text,
+                                  maxLines: 1,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            },
+                          );
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+
                       default:
                         return const CircularProgressIndicator();
                     }
