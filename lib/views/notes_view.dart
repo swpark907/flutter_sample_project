@@ -47,7 +47,6 @@ class _NotesViewState extends State<NotesView> {
                     final shouldLogout = await showLogOutDialog(context);
                     if (shouldLogout) {
                       await AuthService.firebase().logOut();
-
                       Navigator.of(context).pushNamedAndRemoveUntil(
                         loginRoute,
                         (_) => false,
@@ -77,6 +76,7 @@ class _NotesViewState extends State<NotesView> {
                   builder: ((context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
+                      case ConnectionState.active:
                         return const Text("Waiting for all notes...");
                       default:
                         return const CircularProgressIndicator();
