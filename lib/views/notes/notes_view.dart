@@ -6,7 +6,7 @@ import 'package:sample_project/utilities/dialogs/logout_dialog.dart';
 import 'package:sample_project/views/notes/notes_list_view.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../enums/menu_action.dart';
+import '../../enums/menu_action.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -34,7 +34,9 @@ class _NotesViewState extends State<NotesView> {
           actions: [
             IconButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(newNoteRoute);
+                  Navigator.of(context).pushNamed(
+                    createOrUpdateNoteRoute,
+                  );
                 },
                 icon: const Icon(Icons.add)),
             PopupMenuButton<MenuAction>(
@@ -80,6 +82,12 @@ class _NotesViewState extends State<NotesView> {
                             notes: allNotes,
                             onDeleteNote: (note) async {
                               await _notesService.deleteNote(id: note.id);
+                            },
+                            onTap: (note) {
+                              Navigator.of(context).pushNamed(
+                                createOrUpdateNoteRoute,
+                                arguments: note,
+                              );
                             },
                           );
                         } else {
