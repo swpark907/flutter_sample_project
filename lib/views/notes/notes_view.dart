@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sample_project/constants/constants.dart';
+import 'package:sample_project/constants/routes.dart';
 import 'package:sample_project/services/auth/auth_service.dart';
 import 'package:sample_project/services/auth/bloc/auth_bloc.dart';
 import 'package:sample_project/services/auth/bloc/auth_event.dart';
